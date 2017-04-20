@@ -102,7 +102,7 @@ def beSave(script_text):
 # %% 
 
 def sorryMessage():
-    return "Whoops! Time's up or I cannot handle that code... Maybe a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message available."
+    return "Whoops! Coudn't run script! \nTime's up or maybe I just can't handle that code... Might be a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message available."
 
 def riskyCode():
     return "Sorry Dave, I'm afraid I cannot do that. \nUnsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk!"
