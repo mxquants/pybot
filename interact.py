@@ -226,10 +226,13 @@ class RespondEntryMessages(object):
     def now(self):
         
         def getSenderAndText(mevent):
-            text   = mevent['message']['text']
+            text   = mevent['message']['text'] if mevent['message'].get('text') else 'NOTEXT'
             sender = mevent['sender']['id']
             return {'Sender':sender,'OriginalText':text, 'Response':generateResponse(text,sender)}
         
+        if len(self.message_list):
+            return 'Okay!'
+            
         self.respond_list = map(getSenderAndText,self.message_list)
         return self.respond_list
 
