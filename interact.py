@@ -235,8 +235,8 @@ class RespondEntryMessages(object):
             
             return {'Sender':sender,'OriginalText':text, 'Response':response}
         
-        if len(self.message_list):
-            return 'Okay!'
+        #if len(self.message_list):
+        #    return 'Okay!'
             
         self.respond_list = map(getSenderAndText,self.message_list)
         return self.respond_list
