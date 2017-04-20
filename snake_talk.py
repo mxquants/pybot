@@ -52,7 +52,7 @@ def handler(signum, frame):
     raise OSError("Limit time exceeded!")
 
 signal.signal(signal.SIGALRM, handler)
-signal.alarm(1)
+signal.alarm(30)
 {}
 signal.alarm(0)
 """
@@ -102,7 +102,7 @@ def beSave(script_text):
 # %% 
 
 def sorryMessage():
-    return "Whoops! Coudn't run script! \nTime's up or maybe I just can't handle that code... Might be a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message available."
+    return "Whoops! Coudn't run script! \nTime's up or maybe I just can't handle that code... Might be a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message."
 
 def riskyCode():
     return "Sorry Dave, I'm afraid I cannot do that. \nUnsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk!"
