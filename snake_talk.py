@@ -25,7 +25,7 @@ def simulateInput(script=None):
     
     if script is None:
         script = """\
-
+print('\n---- mxquant input test / expected output ----\n\n')
 
 import numpy as np
 np.arange(10)
@@ -35,7 +35,7 @@ print("Hey")
 
 
 
-
+print('\n\n---- mxquant input test / expected output ----\n')
         """
     
     return script
@@ -104,7 +104,7 @@ def sorryMessage():
     return "Whoops! Coudn't run script! \nTime's up or maybe I just can't handle that code... Might be a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message."
 
 def riskyCode():
-    return "Sorry Dave, I'm afraid I cannot do that. \nUnsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk!"
+    return "Sorry Dave, I'm afraid I cannot do that. \n\nReason: unsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk!"
 
 class SpeakPython(object):
     
