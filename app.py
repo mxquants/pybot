@@ -9,7 +9,7 @@ import json
 
 import requests
 from flask import Flask, request
-from snake_talk import * 
+from interact import * 
 
 # %% Declare App 
 
@@ -43,6 +43,12 @@ def webhook():
         
 
         for entry in data["entry"]:
+            
+            Respond = RespondEntryMessages(entry)
+            temp = list(map(sendMessage, Respond.now()))
+            
+            """
+            
             for messaging_event in entry["messaging"]:
 
                 if messaging_event.get("message"):  # someone sent us a message
@@ -51,8 +57,7 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    sp = SpeakPython(script=message_text,user=sender_id)
-                    response_text = sp.interpret()
+                    response_text = generateResponse(data)
                     sendMessage(sender_id, str(response_text))#"got it, thanks!")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
@@ -63,14 +68,16 @@ def webhook():
 
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
+            """
 
     return "ok", 200
 
 
 # %% sendMessage 
 
-def sendMessage(recipient_id, message_text):
-
+def sendMessage(repond_info):
+    recipient_id, message_text = repond_info["Sender"],repond_info["Response"]
+    
     log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
 
     params = {
