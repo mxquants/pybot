@@ -48,7 +48,6 @@ import signal
 
 # signal handler function
 def handler(signum, frame):
-    print("Whoops! Time's up or I cannot handle that code... Maybe a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message available.")
     raise OSError("Limit time exceeded!")
 
 signal.signal(signal.SIGALRM, handler)
@@ -114,6 +113,14 @@ class SpeakPython(object):
         self.user = user 
         
     def interpret(self):
+        
+        if 'mxquant:command -do test'==self.text_script:
+            a = simulateInput(None)
+            b = wrapperFunc(a)
+            saveIntoPyScript(b)
+            _status = generateOutput()
+            _result = sorryMessage() if not _status else readOutput(self.output_name)
+            return _result
         
         # Be save! 
         _save = beSave(self.text_script)
