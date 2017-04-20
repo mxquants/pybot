@@ -6,6 +6,19 @@ Created on Wed Apr 19 19:27:55 2017
 @author: rhdzmota
 """
 
+
+# %% Imports 
+
+import signal
+
+# %% Handle long functions 
+
+
+def handler(signum, frame):
+    print("Whoops! time's up! I cannot handle that code...  (max 5 minutes available). SignalHandler called with: ",signum)
+    raise OSError("Limit time exceeded!")
+
+    
 # %% Simulate user's input
 
 def simulateInput(script=None):
@@ -16,6 +29,8 @@ def simulateInput(script=None):
 
 import numpy as np
 np.arange(10)
+for i in range(4):
+    a = 1
 print("Hey")
 
 
@@ -28,7 +43,21 @@ print("Hey")
 # %% Make wrapper function
 
 def wrapperFunc(string):
-    _str = '\n    '.join(string.split('\n'))
+    _str = """\
+import signal 
+
+# signal handler function
+def handler(signum, frame):
+    print("Whoops! Time's up or I cannot handle that code... Maybe a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message available.")
+    raise OSError("Limit time exceeded!")
+
+signal.signal(signal.SIGALRM, handler)
+signal.alarm(1)
+{}
+signal.alarm(0)
+"""
+    _str = _str.format(string)#'import signal\nsignal.signal(signal.SIGALRM, handler)\nsignal.alarm(300)\n'+string+'\nsignal.alarm(0)'
+    _str = '\n    '.join(_str.split('\n'))
     str_func = "def basicWrapper():\n    {}\n    return 1\n\nif __name__ == '__main__':\n    basicWrapper()".format(_str)
     return str_func
 
@@ -63,7 +92,20 @@ def readOutput(output='output.txt'):
         output_string = f.read()
     return output_string
 
+def beSave(script_text):
+    if 'write' in script_text:
+        return 0
+    if 'open(' in script_text:
+        return 0
+    return 1
+
 # %% 
+
+def sorryMessage():
+    return "Whoops! Time's up or I cannot handle that code... Maybe a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message available."
+
+def riskyCode():
+    return "Sorry Dave, I'm afraid I cannot do that. \nUnsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk!"
 
 class SpeakPython(object):
     
@@ -72,20 +114,35 @@ class SpeakPython(object):
         self.user = user 
         
     def interpret(self):
+        
+        # Be save! 
+        _save = beSave(self.text_script)
+        if not _save:
+            return riskyCode()
+        
+        # Create file names for source (temp.py / {}) and output (output.txt / {})
         self.file_name   = 'temp.py'    if 'anony' in self.user else '{}_file.py'.format(self.user)
         self.output_name = 'output.txt' if 'anony' in self.user else '{}_out.py'.format(self.user)
         
+        # Create code with wrapper func.
         self.code = wrapperFunc(self.text_script)
         
-        # Save code and generate output file
+        # Generate source code, run and save output file
         saveIntoPyScript(self.code,file=self.file_name)
         status = generateOutput(file=self.file_name,output=self.output_name)
         
-        result = "Sorry! Coudn't run script." if not status else readOutput(self.output_name)
+        # Get results or say sorry
+        result = sorryMessage() if not status else readOutput(self.output_name)
         return result
 
 
 # %% 
 
+def test(script_as_string=None):
+    a = simulateInput(script_as_string)
+    sp = SpeakPython(a)
+    return sp.interpret()
+    
+    
 
-# %% 
+#%% 
