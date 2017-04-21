@@ -95,6 +95,8 @@ def beSave(script_text):
         return 0
     if 'open(' in script_text:
         return 0
+    if 'while' in script_text:
+        return 0
     return 1
 
 # %% 
@@ -103,7 +105,7 @@ def sorryMessage():
     return "Whoops! Coudn't run script! \nTime's up or maybe I just can't handle that code... Might be a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message."
 
 def riskyCode():
-    return "Sorry Dave, I'm afraid I cannot do that. \n\nReason: unsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk!"
+    return "Sorry Dave, I'm afraid I cannot do that. \n\nReason: unsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk, while loops and other dangerous code!"
 
 class SpeakPython(object):
     
