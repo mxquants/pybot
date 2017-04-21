@@ -149,6 +149,12 @@ def identifyPyCode(text):
     return 0
 
 def getPyCode(text):
+    
+    if text == '#py' or text == '# py' or text == '#py 'or text == ' #py ':
+        return 'print(No code found!)'
+    if text == '#python' or text == '# python':
+        return 'print(No code found!)'
+    
     if 'python' in text.lower():
         code = 'python'.join(text.split("python")[1:])#text.split("python")[-1]
         return (code[1:] if code[0]==" " else code)
