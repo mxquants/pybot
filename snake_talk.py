@@ -15,7 +15,6 @@ import signal
 
 
 def handler(signum, frame):
-    print("Whoops! time's up! I cannot handle that code...  (max 5 minutes available). SignalHandler called with: ",signum)
     raise OSError("Limit time exceeded!")
 
     
