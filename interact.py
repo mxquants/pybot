@@ -150,8 +150,8 @@ def identifyPyCode(text):
 
 def getPyCode(text):
     if 'python' in text.lower():
-        return text.split("python")[-1]
-    return text.split("py")[-1]
+        return ' '.join(text.split("python ")[1:])#text.split("python")[-1]
+    return ' '.join(text.split("py ")[1:])
 
 def myNameIs():
     return 'My name is... Heissenberg!\n\nJK, you can call me pyBot.' 
