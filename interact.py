@@ -213,6 +213,9 @@ def generateResponse(text,sender):
     if identifyWhatsYourName(text):
         return myNameIs()
     
+    if identifyIntegrals(text):
+        return integralAnswer(text)
+    
     return IDontUnserstand(sender)
 
 # %% 
