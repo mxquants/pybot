@@ -7,6 +7,8 @@ Created on Wed Apr 19 15:01:34 2017
 """
 
 from snake_talk import *
+from pyBot import *
+
 # %% Sample message
 
 def generateSampleData(message='#pycode print("hey")'):
@@ -176,7 +178,6 @@ def getIntegralElements(text):
             "from":from_to[0],"to":from_to[-1]}
 
 def integralAnswer(text):
-    from pyBot import *
     answer = integralWrapper(getIntegralElements(text))
     complete = "The result for your integral, using Monte-Carlo approx is: \n\n\t{}"
     return complete.format(answer)
