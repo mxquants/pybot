@@ -8,6 +8,7 @@ Created on Wed Apr 19 15:01:34 2017
 
 from snake_talk import *
 from pyBot import *
+from jokes import *
 
 # %% Sample message
 
@@ -94,8 +95,17 @@ def getUserInfo(sender_id='1657838257577411'):
 
 def firstGreetingMessage(sender):
     _user = getUserInfo(sender).get('first_name')
-    user_name =  _user if _user is not None else 'Crabisiño'
-    return 'Hello {}! My name is pyBot, a basic AI capable of talking with sankes.\nYou can write python 3.6.1 code and I will return whatever you specify in the print() function. Use the hashtag #py at the beginning of the message so I can tell you are speaking Parseltongue.\n\n Happy coding!'.format(user_name)
+    user_name =  _user if _user is not None else 'Pythonist'
+    _text = """\
+Hi there! 
+
+My name is pyBot, a basic AI capable of talking with sankes.
+
+You can write python 3.6.1 code and I will return whatever you specify in the print() function. Use the hashtag #py at the beginning of the message so I can tell you are speaking Parseltongue.\n\n
+                                                                                   
+Happy coding {}!
+    """
+    return _text.format(user_name)
 
 def deleteFirstWhitespace(text):
     return (text if text[0] != ' ' else deleteFirstWhitespace(text[1:])) 
@@ -136,7 +146,7 @@ def identifyWhatsYourName(text):
         return 1
     if 'name' in text.lower():
         return 1
-    if 'como' in text.lower() and 'llamas' in text.lower():
+    if ('como' in text.lower() or 'cómo' in text.lower()) and 'llamas' in text.lower():
         return 1
     if 'apodo' in text.lower():
         return 1
@@ -182,11 +192,46 @@ def integralAnswer(text):
     complete = "The result for your integral, using Monte-Carlo approx is: \n\n\t{}"
     return complete.format(answer)
 
+def identifyJoke(text):
+    if 'chiste' in text.lower():
+        return 1
+    if 'joke' in text.lower():
+        return 1
+    if 'humor' in text.lower():
+        return 1
+    if 'relax' in text.lower():
+        return 1
+    return 0
+
+def getOneJoke():
+    _text = "I've got a joke for you: \n\n"
+    return _text+chooseJoke()
+
 def myNameIs():
     return 'My name is... Heissenberg!\n\nJK, you can call me pyBot.' 
 
-def genericGreetingMesasge():
-    return 'Hey pythonist! Is a pleasure to hear about you.'
+def genericGreetingMesasge(sender):
+    import numpy as np
+    _user = getUserInfo(sender).get('first_name')
+    user_name =  _user if _user is not None else 'Pythonist'
+    
+    generic_message = {}
+    generic_message[1] = """\
+    Hey Pyhonist! Good to hear about you. 
+    """
+    generic_message[2] = """\
+    Hello {}! :)
+    """.format(user_name)
+    
+    generic_message[3] = """\
+    Hi there. How is it going?
+    """
+    generic_message[4] = """\
+    Er... Huh... Hello. ;) 
+    """
+    _index = np.random.uniform()
+    _list  = list(jokes.keys())
+    return generic_message[_list[int(len(_list)*_index)]]
     
     
 def IDontUnserstand(sender):
@@ -216,6 +261,9 @@ def generateResponse(text,sender):
     
     if identifyIntegrals(text):
         return integralAnswer(text)
+    
+    if identifyJoke(text):
+        return getOneJoke()
     
     return IDontUnserstand(sender)
 
