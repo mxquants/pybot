@@ -230,7 +230,7 @@ def genericGreetingMesasge(sender):
     Er... Huh... Hello. ;) 
     """
     _index = np.random.uniform()
-    _list  = list(jokes.keys())
+    _list  = list(generic_message.keys())
     return generic_message[_list[int(len(_list)*_index)]]
     
     
