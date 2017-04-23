@@ -237,7 +237,14 @@ def genericGreetingMesasge(sender):
 def IDontUnserstand(sender):
     _user = getUserInfo(sender).get('first_name')
     user_name =  _user if _user is not None else 'Pythonist'
-    return 'Iam sorry {}, still learning to talk here. You can use #py and some python code and I will surely understand!'.format(user_name)
+    _text = """\
+I'm sorry {}, still learning to talk here. 
+
+You can use #py before writing some python code and I'll certainly understand. Let's talk with snakes! 
+
+...or you can ask me some jokes. ;)
+    """
+    return _text.format(user_name)
 
 # %% Generate Response
 
@@ -251,7 +258,7 @@ def generateResponse(text,sender):
         return SP.interpret()
     
     if identifyShortMessageAndGreeting(text):
-        return genericGreetingMesasge()
+        return genericGreetingMesasge(sender)
     
     if identifyWhoYouAre(text):
         return firstGreetingMessage(sender)
