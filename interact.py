@@ -176,7 +176,7 @@ def getIntegralElements(text):
             "from":from_to[0],"to":from_to[-1]}
 
 def integralAnswer(text):
-    from pyBot import integralWrapper
+    from pyBot import *
     answer = integralWrapper(getIntegralElements(text))
     complete = "The result for your integral, using Monte-Carlo approx is: \n\n\t{}"
     return complete.format(answer)
