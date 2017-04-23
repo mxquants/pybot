@@ -11,7 +11,7 @@ from pyBot import *
 
 # %% Sample message
 
-def generateSampleData(message='#pycode print("hey")'):
+def generateSampleData(message='integrate x from 0 to 5'):
     
     data =     {
                 "object":"page",

@@ -24,6 +24,7 @@ def fibo(n,p=0,q=1,first=True):
 # %% Integral 
 
 def properIntegral(f,a,b,n=10**6):
+    from numpy import float as _float
     a,b = _float(a),_float(b)
     rnd = uniform(a,b,size=n)
     return (b-a)*sum(list(map(f,rnd)))/n 
