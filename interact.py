@@ -152,6 +152,58 @@ def identifyWhatsYourName(text):
         return 1
     return 0
 
+
+def identifyHowAreYou(text):
+    if 'how' in text.lower() and 'are' in text.lower() and 'you' in text.lower():
+        return 1
+    if 'how' in text.lower() and 'its' in text.lower() and 'going' in text.lower():
+        return 1
+    if 'cómo' in text.lower() and ('estas' in text.lower() or 'andas' in text.lower()):
+        return 1
+    if 'fine' in text.lower() or 'good' in text.lower() or 'great' in text.lower():
+        return 1
+    return 0
+
+def getResponseForHowAreYouAndOkays():
+    import numpy as np 
+    
+    possible_responses={}
+    
+    possible_responses[1] = """\
+    Great! 
+    """
+    possible_responses[2] = """\
+    Perfect. :)
+    """
+    possible_responses[3] = """\
+    Fine, good to know! 
+    """
+    possible_responses[4] = """\
+    Everything is perfect. 
+    """
+    possible_responses[5] = """\
+    Good, just chilling. 
+    """
+    possible_responses[6] = """\
+    Okay ;)
+    """
+    possible_responses[7] = """\
+    Awsome! 
+    """
+    possible_responses[8] = """\
+    Pyfanstastic! 
+    """
+    possible_responses[9] = """\
+    Like a pandas in jupyter. (:
+    """
+    possible_responses[10] = """\
+    Same here!
+    """
+    _index = np.random.uniform()
+    _list  = list(possible_responses.keys())
+    return possible_responses[_list[int(len(_list)*_index)]]
+    
+
 def identifyPyCode(text):
     if "#py" in text.lower():
         return 1
@@ -265,6 +317,9 @@ def generateResponse(text,sender):
     
     if identifyWhatsYourName(text):
         return myNameIs()
+    
+    if identifyHowAreYou(text):
+        return getResponseForHowAreYouAndOkays()
     
     if identifyIntegrals(text):
         return integralAnswer(text)
