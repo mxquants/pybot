@@ -235,8 +235,8 @@ def identifyIntegrals(text):
     return 0
 
 def getIntegralElements(text):
-    from_to = list(map(deleteFirstWhitespace,text.split("from")[-1].split("to")))
-    return {"function":deleteFirstWhitespace(text.split("from")[0].split("integrate")[-1]),
+    from_to = list(map(deleteFirstWhitespace,text.lower().split("from")[-1].split("to")))
+    return {"function":deleteFirstWhitespace(text.lower().split("from")[0].split("integrate")[-1]),
             "from":from_to[0],"to":from_to[-1]}
 
 def integralAnswer(text):
