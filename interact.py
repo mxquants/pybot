@@ -94,7 +94,10 @@ def firstGreetingMessage(sender):
     _user = getUserInfo(sender).get('first_name')
     user_name =  _user if _user is not None else 'Crabisiño'
     return 'Hello {}! My name is pyBot, a basic AI capable of talking with sankes.\nYou can write python 3.6.1 code and I will return whatever you specify in the print() function. Use the hashtag #py at the beginning of the message so I can tell you are speaking Parseltongue.\n\n Happy coding!'.format(user_name)
-    
+
+def deleteFirstWhitespace(text):
+    return (text if text[0] != ' ' else deleteFirstWhitespace(text[1:])) 
+
 def identifyShortMessageAndGreeting(text):
     n = len(text)
     if n > 25:
@@ -160,6 +163,23 @@ def getPyCode(text):
         return (code[1:] if code[0]==" " else code)
     code = 'py'.join(text.split("py")[1:])
     return (code[1:] if code[0]==" " else code)
+
+def identifyIntegrals(text):
+    if 'integrate' in text.lower():
+        if 'from' in text.lower() and 'to' in text.lower():
+            return 1
+    return 0
+
+def getIntegralElements(text):
+    from_to = list(map(deleteFirstWhitespace,text.split("from")[-1].split("to")))
+    return {"function":deleteFirstWhitespace(text.split("from")[0].split("integrate")[-1]),
+            "from":from_to[0],"to":from_to[-1]}
+
+def integralAnswer(text):
+    from pyBot import integralWrapper
+    answer = integralWrapper(getIntegralElements(text))
+    complete = "The result for your integral, using Monte-Carlo approx is: \n\n\t{}"
+    return complete.format(answer)
 
 def myNameIs():
     return 'My name is... Heissenberg!\n\nJK, you can call me pyBot.' 
