@@ -21,8 +21,6 @@ def fibo(n,p=0,q=1,first=True):
 
 # %% Integrals
 
-# %% Integral 
-
 def properIntegral(f,a,b,n=10**6):
     from numpy import float as _float
     a,b = _float(a),_float(b)
@@ -31,8 +29,8 @@ def properIntegral(f,a,b,n=10**6):
 
 def changeLimits(a,b):
     from numpy import float as _float
-    a = -pi/2 if (a=='-inf' or a=='-infinite') else arctan(_float(a))
-    b =  pi/2 if (b=='inf' or b=='infinite')  else arctan(_float(b))
+    a = -pi/2 if (a=='-inf' or a=='-infinite') else arctan(_float(eval(a)))
+    b =  pi/2 if (b=='inf' or b=='infinite')  else arctan(_float(eval(b)))
     return a,b
 
 def integral(f,a,b,n=10**6):
