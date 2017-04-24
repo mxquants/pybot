@@ -297,7 +297,16 @@ def identifySendNudes(text):
 def sendNudes():
     return "https://scontent-dft4-2.xx.fbcdn.net/v/t34.0-12/18051760_10156149925989966_1903532741_n.png?oh=d54e7de3f9776a37d92ecd402d1f97a6&oe=58FFBAD0"
 
-    
+def identifyMe(text):
+    if "me" == text.lower():
+        return 1
+    return 0
+
+def getProfilePic(sender):
+    pic = getUserInfo(sender).get('profile_pic')
+    if pic is not None:
+        return pic
+    return "https://lh3.googleusercontent.com/UBz80Hwz87KC4Aw3q1_F9gZjLz3NyDagC52GtubICL84ERRrq6vwOPZcMULqaSJFcjaOWBA1KEUNPW6y4VrfqkzsZrxEX6xZyhzGnJ6u_u50CVlgIGA6oTSml2TucDvZ7MvcfyY7mK99QH3Ug2G7sHt3Kfx6uZX_YNfe-rN_kECdoQCz1MHjx3w0NflEcoc0muX3CTVcMUnrVjJQvEP5DaheeApIJEKCNNIrvfFt5DChj1VPtaitFyYejfuQKc2OjlBrMPELpanQPADvoKUepxRiVAyn-xmUSw_xcdLbbGu8y8r9mz2dVyiasepnakwZNzuRRHbC4Byv66kQ_Pqv4S2lHo5OIK65pnQN0RxJNnkWXDgelmrvmAVL4E4vcrg90QhYuL4GNyH7AsCKNegTPE5kjNvmrfNpY-DxDjVyCQMBkxg9rcpmvtEKTx3BYyPnWi0w9l8WjugPjPMSrgZNiFclD7i3DLgTCzLtf0PSksLmv6exPHswnTA5JKU200yIgQKhf3b3THCF4YpqMUVQvlyxRL6KVbH0uJN_un5ZfbXuuppcauvs1O_XEYoOHTkbgSPMGuAWMjT2CuTDRpmQ3P_rGNiEanQtM-Ypx-e5Ax0Xrkc=s170-no"
 def IDontUnserstand(sender):
     _user = getUserInfo(sender).get('first_name')
     user_name =  _user if _user is not None else 'Pythonist'
@@ -341,6 +350,9 @@ def generateResponse(text,sender):
     
     if identifySendNudes(text):
         return sendNudes(),'image'
+    
+    if identifyMe(text):
+        return 
     
     return IDontUnserstand(sender),'text'
 
