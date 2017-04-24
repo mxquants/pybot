@@ -105,6 +105,22 @@ def log(message):
     print(str(message))
     sys.stdout.flush()
 
+
+
+# %% Test  
+
+@app.route('/test', methods=['GET'])
+def returnTestImage():
+    html = """\ 
+<!DOCTYPE html>
+<html>
+<body>
+<h2>The Incredible pyBot!</h2>
+<img src="https://scontent-dft4-2.xx.fbcdn.net/v/t34.0-12/18051760_10156149925989966_1903532741_n.png?oh=d54e7de3f9776a37d92ecd402d1f97a6&oe=58FFBAD0">
+</body>
+</html>
+    """
+    return html 
 # %% 
 
 if __name__ == '__main__':
