@@ -33,7 +33,7 @@ def changeLimits(a,b):
     b =  pi/2 if (b=='inf' or b=='infinite')  else arctan(_float(eval(b)))
     return a,b
 
-def integral(f,a,b,n=10**6):
+def integral(f,a,b,n=50**6):
     f_u = lambda x: 2*f(tan(x))/(1+cos(2*x))
     a,b = changeLimits(a,b)
     return properIntegral(f_u,a,b,n)
