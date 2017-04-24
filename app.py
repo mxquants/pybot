@@ -90,6 +90,7 @@ def sendMessage(response_info):
     if r.status_code != 200:
         log(r.status_code)
         log(r.text)
+        
 
 # %% Log function -- simple wrapper for logging to stdout on heroku
 

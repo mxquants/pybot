@@ -92,20 +92,16 @@ def getUserInfo(sender_id='1657838257577411'):
     userprofile_api = 'https://graph.facebook.com/v2.6/{USER_ID}?fields=first_name,profile_pic,gender&access_token={PAGE_ACCESS_TOKEN}'
     return eval(requests.get(userprofile_api.format(USER_ID=sender_id,PAGE_ACCESS_TOKEN=pat)).text)
 
-
-def firstGreetingMessage(sender):
-    _user = getUserInfo(sender).get('first_name')
-    user_name =  _user if _user is not None else 'Pythonist'
+# Parseltongue
+def firstGreetingMessage():
+    #_user = getUserInfo(sender).get('first_name')
+    #user_name =  _user if _user is not None else 'Pythonist'
     _text = """\
 Hi there! 
 
-My name is pyBot, a basic AI capable of talking with sankes.
-
-You can write python 3.6.1 code and I will return whatever you specify in the print() function. Use the hashtag #py at the beginning of the message so I can tell you are speaking Parseltongue.\n\n
-                                                                                   
-Happy coding {}!
+My name is pyBot, the only bot that can talk with snakes! Use #py at the beginning of your code so I can speak Parseltongue with you!
     """
-    return _text.format(user_name)
+    return _text#.format(user_name)
 
 def deleteFirstWhitespace(text):
     return (text if text[0] != ' ' else deleteFirstWhitespace(text[1:])) 
