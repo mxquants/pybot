@@ -285,6 +285,18 @@ def genericGreetingMesasge(sender):
     _list  = list(generic_message.keys())
     return generic_message[_list[int(len(_list)*_index)]]
     
+
+
+def identifySendNudes(text):
+    if 'send nudes' in text.lower():
+        return 1
+    if 'pack' in text.lower():
+        return 1
+    return 0
+
+def sendNudes():
+    return "https://scontent-dft4-2.xx.fbcdn.net/v/t34.0-12/18051760_10156149925989966_1903532741_n.png?oh=d54e7de3f9776a37d92ecd402d1f97a6&oe=58FFBAD0"
+
     
 def IDontUnserstand(sender):
     _user = getUserInfo(sender).get('first_name')
@@ -307,42 +319,31 @@ def generateResponse(text,sender):
     if identifyPyCode(text):
         text_script = getPyCode(text)
         SP = SpeakPython(script=text_script,user=sender)
-        return SP.interpret()
+        return SP.interpret(),'text'
     
     if identifyShortMessageAndGreeting(text):
-        return genericGreetingMesasge(sender)
+        return genericGreetingMesasge(sender),'text'
     
     if identifyWhoYouAre(text):
-        return firstGreetingMessage(sender)
+        return firstGreetingMessage(sender),'text'
     
     if identifyWhatsYourName(text):
-        return myNameIs()
+        return myNameIs(),'text'
     
     if identifyHowAreYou(text):
-        return getResponseForHowAreYouAndOkays()
+        return getResponseForHowAreYouAndOkays(),'text'
     
     if identifyIntegrals(text):
-        return integralAnswer(text)
+        return integralAnswer(text),'text'
     
     if identifyJoke(text):
-        return getOneJoke()
+        return getOneJoke(),'text'
     
-    return IDontUnserstand(sender)
+    if identifySendNudes(text):
+        return sendNudes(),'image'
+    
+    return IDontUnserstand(sender),'text'
 
-# %% 
-
-class Test(object):
-    
-    def __init__(self,message='Qué tal Crabo'):
-        self.text_message = message
-        
-    def perform(self,_inplace=True):
-        self.data = generateSampleData(self.text_message)
-        self.respond = generateResponse(self.data)
-        if _inplace:
-            return self.respond 
-    
-    
 # %% 
 
 class RespondEntryMessages(object):
@@ -373,10 +374,12 @@ class RespondEntryMessages(object):
             if not text:
                 response = 'Nice '+str(mevent['message']['attachments'][0]['type'])
             else: 
-                response = generateResponse(text,sender)
+                response,_type = generateResponse(text,sender)
+            if "text" in _type:
+                return {'Sender':sender,'OriginalText':text, 'Text':response}
+            if "img" in _type:
+                return {'Sender':sender,'OriginalText':text, 'ImageURL':response}
             
-            return {'Sender':sender,'OriginalText':text, 'Response':response}
-        
         #if len(self.message_list):
         #    return 'Okay!'
             
