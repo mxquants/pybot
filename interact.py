@@ -376,9 +376,9 @@ class RespondEntryMessages(object):
             else: 
                 response,_type = generateResponse(text,sender)
             if "text" in _type:
-                return {'Sender':sender,'OriginalText':text, 'Text':response}
+                return {'Sender':sender,'OriginalText':text, 'Text':response,'_type':_type}
             if "img" in _type:
-                return {'Sender':sender,'OriginalText':text, 'ImageURL':response}
+                return {'Sender':sender,'OriginalText':text, 'ImageURL':response,'_type':_type}
             
         #if len(self.message_list):
         #    return 'Okay!'
