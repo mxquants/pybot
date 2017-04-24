@@ -372,7 +372,7 @@ class RespondEntryMessages(object):
             sender = mevent['sender']['id']
             text   = mevent['message'].get('text')
             if not text:
-                response = 'Nice '+str(mevent['message']['attachments'][0]['type'])
+                response,_type = 'Nice '+str(mevent['message']['attachments'][0]['type']),"text"
             else: 
                 response,_type = generateResponse(text,sender)
             if "text" in _type:
