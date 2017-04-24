@@ -370,14 +370,14 @@ class RespondEntryMessages(object):
         
         def getSenderAndText(mevent):
             sender = mevent['sender']['id']
-            text   = mevent['message']['text'] if mevent['message'].get('text') else 0
+            text   = mevent['message'].get('text')
             if not text:
                 response = 'Nice '+str(mevent['message']['attachments'][0]['type'])
             else: 
                 response,_type = generateResponse(text,sender)
             if "text" in _type:
                 return {'Sender':sender,'OriginalText':text, 'Text':response,'_type':_type}
-            if "img" in _type:
+            if "image" in _type:
                 return {'Sender':sender,'OriginalText':text, 'ImageURL':response,'_type':_type}
             
         #if len(self.message_list):

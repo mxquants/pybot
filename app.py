@@ -53,18 +53,18 @@ def webhook():
 
 # %% sendMessage 
 
-def generatePostJsonData(repond_info):
-    _type = repond_info['_type']
-    recipient_id = repond_info["Sender"]
+def generatePostJsonData(response_info):
+    _type = response_info['_type']
+    recipient_id = response_info["Sender"]
     if "text" in _type:
-        message_text = repond_info["Text"]
+        message_text = response_info["Text"]
         data = json.dumps({
                             "recipient": {"id": recipient_id},
                             "message": {"text": message_text}
                             })
         return data
-    if "img" in _type:
-        image_url = repond_info["ImageURL"]
+    if "image" in _type:
+        image_url = response_info["ImageURL"]
         data = json.dumps({
                             "recipient": {"id": recipient_id},
                             "message": {"attachment": {
@@ -74,14 +74,14 @@ def generatePostJsonData(repond_info):
                                             "is_reusable":True}}}})
         return data 
 
-def sendMessage(repond_info):
+def sendMessage(response_info):
     
     
-    #log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=repond_info))
+    #log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=response_info))
 
     params  = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
     headers = {"Content-Type": "application/json"}
-    data    = generatePostJsonData(repond_info)
+    data    = generatePostJsonData(response_info)
     
     r = requests.post("https://graph.facebook.com/v2.6/me/messages", 
                       params=params, 
