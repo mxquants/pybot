@@ -27,7 +27,7 @@ def verify():
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
 
-    return "Hello world, this is pyBot by mxquants. Have a pythonic day! ", 200
+    return render_template('index.html'), 200#"Hello world, this is pyBot by mxquants. Have a pythonic day! ", 200
 
 # %% POST 
 
@@ -48,7 +48,7 @@ def webhook():
             temp = list(map(sendMessage, Respond.now()))
             
 
-    return render_template('index.html'), 200
+    return "ok", 200
 
 
 # %% sendMessage 
