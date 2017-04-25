@@ -8,7 +8,7 @@ import sys
 import json
 
 import requests
-from flask import Flask, request
+from flask import Flask, request, render_template
 from interact import * 
 
 # %% Declare App 
@@ -48,7 +48,7 @@ def webhook():
             temp = list(map(sendMessage, Respond.now()))
             
 
-    return "ok", 200
+    return render_template('index.html'), 200
 
 
 # %% sendMessage 
