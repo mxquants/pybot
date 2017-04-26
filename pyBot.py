@@ -69,6 +69,7 @@ def plot(f,a,b,legend='',filename=''):
     plt.legend([legend.replace("**","^")])
     plt.grid()
     plt.savefig(filename)
+    plt.close()
     
 def plotWrapper(param,sender):
     from numpy import float as _float
