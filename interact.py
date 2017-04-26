@@ -117,7 +117,7 @@ def getUserProfilePic(sender='1657838257577411'):
     DBM = ih.DropBoxManager()
     DBM.deleteFile(path="/profile_pics",filename=filename)
     DBM.uploadFile(path="/profile_pics",filename=filename)
-    temo = DBM.getTemporaryUrl(path="/plots",filename=filename)
+    temo = DBM.getTemporaryUrl(path="/profile_pics",filename=filename)
     os.remove(tempo_filename)
     os.remove(filename)
     return temo['url']
