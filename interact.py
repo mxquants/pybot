@@ -419,13 +419,13 @@ def generateResponse(text,sender):
         return getProfilePic(sender),'image'
         
     if identifyCoin(text):
-        return flipCoin()
+        return flipCoin(),'text'
     
     if identifyDice(text):
-        return rollDice()
+        return rollDice(),'text'
     
     if identifyChoice(text):
-        return getRandomChoice(text)
+        return getRandomChoice(text),'text'
     
     return IDontUnserstand(sender),'text'
 
