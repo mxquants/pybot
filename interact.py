@@ -224,6 +224,8 @@ def getPyCode(text):
     code = 'py'.join(text.split("py")[1:])
     return (code[1:] if code[0]==" " else code)
 
+# Solve Integrals 
+
 def identifyIntegrals(text):
     if 'integrate' in text.lower():
         if 'from' in text.lower() and 'to' in text.lower():
@@ -231,6 +233,7 @@ def identifyIntegrals(text):
     return 0
 
 def getIntegralElements(text):
+    text = text.replace("^","**")
     from_to = list(map(deleteFirstWhitespace,text.lower().split("from")[-1].split("to")))
     return {"function":deleteFirstWhitespace(text.lower().split("from")[0].split("integrate")[-1]),
             "from":from_to[0],"to":from_to[-1]}
@@ -239,6 +242,39 @@ def integralAnswer(text):
     answer = integralWrapper(getIntegralElements(text))
     complete = "The result for your integral, using Monte-Carlo approx is: \n\n\t{}"
     return complete.format(answer)
+
+# Matplotlib plots
+
+def identifyPlot(text):
+    if 'plot' in text.lower():
+        if 'from' in text.lower() and 'to' in text.lower():
+            return 1
+    return 0
+
+def getPlotElements(text):
+    text = text.replace("^","**")
+    from_to = list(map(deleteFirstWhitespace,text.lower().split("from")[-1].split("to")))
+    return {"function":deleteFirstWhitespace(text.lower().split("from")[0].split("plot")[-1]),
+            "from":from_to[0],"to":from_to[-1]}
+
+def makePlot(text,sender):
+    import image_hosting as ih
+    
+    # get filename
+    filename = plotWrapper(getPlotElements(text),sender)
+    
+    if filename is None:
+        return "https://www.dropbox.com/s/e0nhytmos7qyzqt/NotAvailable.jpg?dl=0"
+    
+    DBM = ih.DropBoxManager()
+    
+    # delete file 
+    DBM.deleteFile(filename="/plots"+filename)
+    DBM.uploadFile(filename=filename,path="/plots")
+    temo = DBM.getTemporaryUrl(filename=filename,path="/plots")
+    return temo['url']
+
+# Jokes 
 
 def identifyJoke(text):
     if 'chiste' in text.lower():
@@ -341,6 +377,9 @@ def generateResponse(text,sender):
     
     if identifyIntegrals(text):
         return integralAnswer(text),'text'
+        
+    if identifyPlot(text):
+        return makePlot(text,sender),'image'
     
     if identifyJoke(text):
         return getOneJoke(),'text'

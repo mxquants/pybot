@@ -4,7 +4,7 @@
 # %% imports 
 
 from numpy.random import uniform
-from numpy import sin, cos, tan, arctan, arcsin, arccos, pi, e, power
+from numpy import sin, cos, tan, arctan, arcsin, arccos, pi, e, power,arange
 
 
 # %% Fibonacci function
@@ -57,3 +57,44 @@ def integralWrapper(param):
 
     return _integral
 
+# %% Plot 
+
+def plot(f,a,b,legend='',filename=''):
+    import matplotlib.pyplot as plt
+    delta = (b-a)/10000
+    x = arange(a,b,delta)
+    plt.plot(x,f(x))
+    plt.xlabel('x-axis')
+    plt.ylabel('y-value')
+    plt.legend([legend.replace("**","^")])
+    plt.grid()
+    plt.savefig(filename)
+    
+def plotWrapper(param,sender):
+    from numpy import float as _float
+    
+    def str2lambda(func):
+        func=func.lower()   
+        return eval("lambda x: "+func)
+
+    filename = 'plot_{}.png'.format(sender)
+    a,b = _float(eval(param['from'])),_float(eval(param['to']))
+    
+    try:
+        plot(f=str2lambda(param['function']),a=a,b=b,
+             legend=param['function'],
+             filename=filename)
+    except:
+        filename = None 
+    
+    return filename
+
+
+
+# %% 
+# Silvia 
+
+# %% 
+
+
+# %% 
