@@ -105,6 +105,8 @@ def getUserProfilePic(sender='1657838257577411'):
     
     # get user's data 
     temp = eval(requests.get(userprofile_api.format(USER_ID=sender,PAGE_ACCESS_TOKEN=pat)).text)
+    if not temp.get('profile_pic'):
+        return "https://www.dropbox.com/s/ph4kd5pmrln49oi/NotAvailable.png?dl=0"
     urllib.request.urlretrieve(temp['profile_pic'].replace("\\",""), tempo_filename)
     
     # convert to .png 
@@ -299,7 +301,7 @@ def makePlot(text,sender):
     filename = plotWrapper(getPlotElements(text),sender)
     
     if filename is None:
-        return "https://www.dropbox.com/s/e0nhytmos7qyzqt/NotAvailable.jpg?dl=0"
+        return "https://www.dropbox.com/s/ph4kd5pmrln49oi/NotAvailable.png?dl=0"
     
     DBM = ih.DropBoxManager()
     
