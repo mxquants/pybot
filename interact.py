@@ -86,6 +86,31 @@ def simulateEntry(n=1,message='#pycode print("hey")'):
 
 # %% Interpret
 
+def getUserProfilePic(sender='1657838257577411'):
+    import image_hosting as ih
+    import urllib.request
+    import requests
+    
+    # set filename 
+    filename = "profilepic_{}.jpg".format(sender)
+    
+    # Page Access Token 
+    pat = 'EAAaiAN9H6KEBANNiZCZA1xnwt1wxd9twtZADhHkfvpWHCh8JaVd7CNZB61Yb0jMZA4KAFChAyDNz74ZCpoaWyvNGH2khu6N8LdVEzePFJZC6ueCfvM9Tm9R0d8Ebj4DoZC8CTNbrVISI3DB0MMZBFtNQRlvH9WRcc2xfhS1tCTNJyOQZDZD'
+    
+    # FB API for user's info 
+    userprofile_api = 'https://graph.facebook.com/v2.6/{USER_ID}?fields=first_name,profile_pic,gender&access_token={PAGE_ACCESS_TOKEN}'
+    
+    # get user's data 
+    temp = eval(requests.get(userprofile_api.format(USER_ID=sender,PAGE_ACCESS_TOKEN=pat)).text)
+    urllib.request.urlretrieve(temp['profile_pic'].replace("\\",""), filename)
+    
+    # upload to dropbox
+    DBM = ih.DropBoxManager()
+    DBM.deleteFile(path="/profile_pics",filename=filename)
+    DBM.uploadFile(path="/profile_pics",filename=filename)
+    temo = DBM.getTemporaryUrl(path="/plots",filename=filename)
+    return temo['url']
+
 def getUserInfo(sender_id='1657838257577411'):
     import requests
     pat = 'EAAaiAN9H6KEBANNiZCZA1xnwt1wxd9twtZADhHkfvpWHCh8JaVd7CNZB61Yb0jMZA4KAFChAyDNz74ZCpoaWyvNGH2khu6N8LdVEzePFJZC6ueCfvM9Tm9R0d8Ebj4DoZC8CTNbrVISI3DB0MMZBFtNQRlvH9WRcc2xfhS1tCTNJyOQZDZD'
@@ -366,7 +391,7 @@ def getProfilePic(sender):
     pic = getUserInfo(sender).get('profile_pic')
     if pic is None:
         return "https://lh3.googleusercontent.com/UBz80Hwz87KC4Aw3q1_F9gZjLz3NyDagC52GtubICL84ERRrq6vwOPZcMULqaSJFcjaOWBA1KEUNPW6y4VrfqkzsZrxEX6xZyhzGnJ6u_u50CVlgIGA6oTSml2TucDvZ7MvcfyY7mK99QH3Ug2G7sHt3Kfx6uZX_YNfe-rN_kECdoQCz1MHjx3w0NflEcoc0muX3CTVcMUnrVjJQvEP5DaheeApIJEKCNNIrvfFt5DChj1VPtaitFyYejfuQKc2OjlBrMPELpanQPADvoKUepxRiVAyn-xmUSw_xcdLbbGu8y8r9mz2dVyiasepnakwZNzuRRHbC4Byv66kQ_Pqv4S2lHo5OIK65pnQN0RxJNnkWXDgelmrvmAVL4E4vcrg90QhYuL4GNyH7AsCKNegTPE5kjNvmrfNpY-DxDjVyCQMBkxg9rcpmvtEKTx3BYyPnWi0w9l8WjugPjPMSrgZNiFclD7i3DLgTCzLtf0PSksLmv6exPHswnTA5JKU200yIgQKhf3b3THCF4YpqMUVQvlyxRL6KVbH0uJN_un5ZfbXuuppcauvs1O_XEYoOHTkbgSPMGuAWMjT2CuTDRpmQ3P_rGNiEanQtM-Ypx-e5Ax0Xrkc=s170-no"
-    return pic
+    return getUserProfilePic(sender)
 
 def IDontUnserstand(sender):
     _user = getUserInfo(sender).get('first_name')
