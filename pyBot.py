@@ -79,9 +79,11 @@ def plotWrapper(param,sender):
         return eval("lambda x: "+func)
 
     filename = 'plot_{}.png'.format(sender)
-    a,b = _float(eval(param['from'])),_float(eval(param['to']))
     
     try:
+        
+        a,b = _float(eval(param['from'])),_float(eval(param['to']))
+        
         plot(f=str2lambda(param['function']),a=a,b=b,
              legend=param['function'],
              filename=filename)
