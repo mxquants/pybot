@@ -120,6 +120,7 @@ def getUserProfilePic(sender='1657838257577411'):
     temo = DBM.getTemporaryUrl(path="/profile_pics",filename=filename)
     os.remove(tempo_filename)
     os.remove(filename)
+    print(temo['url'])
     return temo['url']
 
 def getUserInfo(sender_id='1657838257577411'):
@@ -452,7 +453,7 @@ def generateResponse(text,sender):
         return sendNudes(),'image'
     
     if identifyMe(text):
-        return getUserProfilePic(sender),'image'
+        return getUserProfilePic(sender),'text'
         
     if identifyCoin(text):
         return flipCoin(),'text'
