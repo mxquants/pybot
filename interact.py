@@ -450,7 +450,7 @@ def generateResponse(text,sender):
         return sendNudes(),'image'
     
     if identifyMe(text):
-        return getProfilePic(sender),'image'
+        return getUserProfilePic(sender),'image'
         
     if identifyCoin(text):
         return flipCoin(),'text'
