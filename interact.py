@@ -87,12 +87,15 @@ def simulateEntry(n=1,message='#pycode print("hey")'):
 # %% Interpret
 
 def getUserProfilePic(sender='1657838257577411'):
+    from PIL import Image
     import image_hosting as ih
     import urllib.request
     import requests
+    import os
     
     # set filename 
-    filename = "profilepic_{}.jpg".format(sender)
+    tempo_filename = "profilepic_{}.jpg".format(sender)
+    filename = "profilepic_{}.png".format(sender)
     
     # Page Access Token 
     pat = 'EAAaiAN9H6KEBANNiZCZA1xnwt1wxd9twtZADhHkfvpWHCh8JaVd7CNZB61Yb0jMZA4KAFChAyDNz74ZCpoaWyvNGH2khu6N8LdVEzePFJZC6ueCfvM9Tm9R0d8Ebj4DoZC8CTNbrVISI3DB0MMZBFtNQRlvH9WRcc2xfhS1tCTNJyOQZDZD'
@@ -102,13 +105,19 @@ def getUserProfilePic(sender='1657838257577411'):
     
     # get user's data 
     temp = eval(requests.get(userprofile_api.format(USER_ID=sender,PAGE_ACCESS_TOKEN=pat)).text)
-    urllib.request.urlretrieve(temp['profile_pic'].replace("\\",""), filename)
+    urllib.request.urlretrieve(temp['profile_pic'].replace("\\",""), tempo_filename)
+    
+    # convert to .png 
+    im = Image.open(tempo_filename)
+    im.save(filename)
     
     # upload to dropbox
     DBM = ih.DropBoxManager()
     DBM.deleteFile(path="/profile_pics",filename=filename)
     DBM.uploadFile(path="/profile_pics",filename=filename)
     temo = DBM.getTemporaryUrl(path="/plots",filename=filename)
+    os.remove(tempo_filename)
+    os.remove(filename)
     return temo['url']
 
 def getUserInfo(sender_id='1657838257577411'):
