@@ -19,6 +19,19 @@ def fibo(n,p=0,q=1,first=True):
     return fibo(n-1,p,q,first)
 
 
+# %% Flip a coin and roll a Dice 
+
+def flipCoin():
+    return 'Heads!' if uniform() < 0.5 else "Tails!"
+
+def rollDice():
+    return int(uniform(0,6))
+
+def randomChoice(_list):
+    elements = len(_list)
+    choice = int(uniform(0,elements))
+    return _list[choice]
+
 # %% Integrals
 
 def properIntegral(f,a,b,n=10**6):

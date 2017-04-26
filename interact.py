@@ -296,6 +296,32 @@ def getOneJoke():
 def myNameIs():
     return 'My name is... Heissenberg!\n\nJK, you can call me pyBot.' 
 
+# Random
+
+def identifyCoin(text):
+    if 'flip' in text.lower() and 'coin' in text.lower():
+        return 1
+    return 0
+
+def identifyDice(text):
+    if 'roll' in text.lower() and 'dice' in text.lower():
+        return 1
+    return 0
+
+def identifyChoice(text):
+    if 'random choice:' in text.lower():
+        return 1
+    return 0
+
+def getRandomChoice(text):
+    elements = [elms for elms in text.split(':')[-1].replace(',',' ').split(" ") if elms != '']
+    if (elements is None) or (len(elements) == 0):
+        return "Sorry, I'm confused!"
+    return str(randomChoice(elements))
+    
+
+# generic message 
+
 def genericGreetingMesasge(sender):
     import numpy as np
     _user = getUserInfo(sender).get('first_name')
@@ -391,6 +417,15 @@ def generateResponse(text,sender):
     
     if identifyMe(text):
         return getProfilePic(sender),'image'
+        
+    if identifyCoin(text):
+        return flipCoin()
+    
+    if identifyDice(text):
+        return rollDice()
+    
+    if identifyChoice(text):
+        return getRandomChoice(text)
     
     return IDontUnserstand(sender),'text'
 
