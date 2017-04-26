@@ -259,6 +259,7 @@ def getPlotElements(text):
 
 def makePlot(text,sender):
     import image_hosting as ih
+    import os 
     
     # get filename
     filename = plotWrapper(getPlotElements(text),sender)
@@ -272,6 +273,7 @@ def makePlot(text,sender):
     DBM.deleteFile(path="/plots",filename=filename)
     DBM.uploadFile(path="/plots",filename=filename)
     temo = DBM.getTemporaryUrl(path="/plots",filename=filename)
+    os.remove(filename)
     return temo['url']
 
 # Jokes 
