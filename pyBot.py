@@ -4,7 +4,7 @@
 # %% imports 
 
 from numpy.random import uniform
-from numpy import sin, cos, tan, arctan, arcsin, arccos, pi, e, power,arange
+from numpy import log, sin, cos, tan, arctan, arcsin, arccos, pi, e, exp, power,arange
 
 
 # %% Fibonacci function
@@ -63,10 +63,11 @@ def plot(f,a,b,legend='',filename=''):
     import matplotlib.pyplot as plt
     delta = (b-a)/10000
     x = arange(a,b,delta)
-    plt.plot(x,f(x))
+    list(map(lambda z: plt.plot(x,z(x)),f))
+    #plt.plot(x,f(x))
     plt.xlabel('x-axis')
     plt.ylabel('y-value')
-    plt.legend([legend.replace("**","^")])
+    plt.legend([L.replace("**","^") for L in legend])
     plt.grid()
     plt.savefig(filename)
     plt.close()
@@ -83,9 +84,9 @@ def plotWrapper(param,sender):
     try:
         
         a,b = _float(eval(param['from'])),_float(eval(param['to']))
-        
-        plot(f=str2lambda(param['function']),a=a,b=b,
-             legend=param['function'],
+        flist = list(map(str2lambda,param['function'].split(",")))
+        plot(f=flist,a=a,b=b,
+             legend=param['function'].split(","),
              filename=filename)
     except:
         filename = None 
