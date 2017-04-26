@@ -269,9 +269,9 @@ def makePlot(text,sender):
     DBM = ih.DropBoxManager()
     
     # delete file 
-    DBM.deleteFile(filename="/plots"+filename)
-    DBM.uploadFile(filename=filename,path="/plots")
-    temo = DBM.getTemporaryUrl(filename=filename,path="/plots")
+    DBM.deleteFile(path="/plots",filename=filename)
+    DBM.uploadFile(path="/plots",filename=filename)
+    temo = DBM.getTemporaryUrl(path="/plots",filename=filename)
     return temo['url']
 
 # Jokes 
