@@ -74,7 +74,7 @@ def integralWrapper(param):
 
 def plot(f,a,b,legend='',filename=''):
     import matplotlib.pyplot as plt
-    delta = (b-a)/10000
+    delta = (b-a)/30000
     x = arange(a,b,delta)
     list(map(lambda z: plt.plot(x,z(x)),f))
     #plt.plot(x,f(x))
@@ -82,7 +82,7 @@ def plot(f,a,b,legend='',filename=''):
     plt.ylabel('y-value')
     plt.legend([L.replace("**","^") for L in legend])
     plt.grid()
-    plt.savefig(filename)
+    plt.savefig(filename,dpi=900)
     plt.close()
     
 def plotWrapper(param,sender):
