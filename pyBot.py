@@ -214,7 +214,7 @@ def optimHandler(text):
     
     # create required variables
     exec(', '.join(variables)+""" = sy.symbols('"""+' '.join(variables)+"""')""")
-    _vars = eval('_vars = ['+', '.join(variables)+']')
+    _vars = eval('['+', '.join(variables)+']')
     
     # create function
     f = eval(text_func)
