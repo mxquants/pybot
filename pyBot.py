@@ -203,14 +203,19 @@ class LagrangeMultipliersSolver(object):
         self.results = Op.getOptimVals(self.lagrangian,_vars+[lmda],feval=f)
         
         return self.results 
-
-
+                       
 def optimHandler(text):
     text = text.replace('^','**')
     
+        
+    def getRidOfSpecialFunc(text):
+        return text.replace("sin"," ").replace("pi"," ")
+    def getSyntaxRight(text):
+        return text.replace("e","sy.exp(1)").replace("sin","sy.sin").replace("cos","sy.cos").replace("tan","sy.tan").replace("pi","sy.pi")
+    
     # get elements 
-    variables = [i for i in text.split(' of')[-1] if (i not in ' / * - + ( ) [ ] e pi 123456789 ^ ')]
-    text_func = text.split(' of')[-1]
+    variables = list(set([i for i in getRidOfSpecialFunc(text.split(' of')[-1]) if (i not in ' / * - + ( ) [ ] e 123456789 ^ ')]))
+    text_func = getSyntaxRight(text.split(' of')[-1])
     
     # create required variables
     exec(', '.join(variables)+""" = sy.symbols('"""+' '.join(variables)+"""')""")
