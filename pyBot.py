@@ -5,7 +5,7 @@
 
 from numpy.random import uniform
 from numpy import log, sin, cos, tan, arctan, arcsin, arccos, pi, e, exp, power,arange
-
+import sympy as sy 
 
 # %% Fibonacci function
 def fibo(n,p=0,q=1,first=True):
@@ -108,9 +108,130 @@ def plotWrapper(param,sender):
 
 
 
-# %% 
-# Silvia 
+# %% Optimization 
 
+def gradient(f,_vars):
+    return [sy.diff(f,i) for i in _vars]
+
+def valueOrWarning(value, ref=''):
+    if value is None:
+        return 'Something went wrong! Not optim_val:{} found. Try "optim".'.format(ref)
+    return value
+
+class Optimizer(object):
+    
+    def __init__(self):
+        return None
+    
+    def getOptimVals(self,f,_vars,feval=None):
+        import numpy as np 
+        
+        # get solution
+        solution = sy.solve(gradient(f,_vars))
+        self.solution = solution
+        
+        # function to evaluate
+        feval = f if feval is None else feval
+        
+        def minmax(feval,solution):
+            value   = feval.evalf(subs=solution)
+            reference = solution.copy()
+            reference[list(solution.keys())[0]] += 0.01
+            ref_val = feval.evalf(subs=reference)
+            return 'max' if (value-ref_val)>0 else 'min'
+        
+        if type(solution)==type({}):
+            return {minmax(feval,solution):{'value':f.evalf(subs=solution),'solution':solution}}
+        
+        results = {
+            'max':{'value':None,'solution':None},
+            'min':{'value':None,'solution':None}
+        }
+
+        max_ref,min_ref = -np.float('inf'),np.float('inf')
+        
+        try:
+            for sol in solution: 
+                value = feval.evalf(subs=sol)
+
+                if value < min_ref:
+                    min_ref = value 
+                    results['min']['value'] = value
+                    results['min']['solution'] = sol
+
+                if value > max_ref:
+                    max_ref = value 
+                    results['max']['value'] = value
+                    results['max']['solution'] = sol
+        except:
+            results = solution
+        
+        self.results = results 
+        
+        return results
+    
+    def getMax(self,f,_vars):
+        return valueOrWarning(self.getOptimVals(f,_vars).get('max'),ref='max')
+    
+    def getMin(self,f,_vars):
+        return valueOrWarning(self.getOptimVals(f,_vars).get('min'),ref='min')
+    
+    def getBoth(self,f,_vars):
+        return valueOrWarning(self.getOptimVals(f,_vars),ref='both')
+    
+    def getAll(self,f,_vars):
+        self.getOptimVals(f,_vars)
+        return self.solution
+    
+
+class LagrangeMultipliersSolver(object):
+    
+    def __init__(self):
+        return None
+        
+    def getSolution(self,f,g,_vars):
+        
+        # get lambda 
+        lmda = sy.symbols('lmda')
+        
+        # lagrangian function and gradient 
+        self.lagrangian = f - lmda*g
+        self.lagrangian_grad = gradient(self.lagrangian,_vars+[lmda])
+        
+        # solution 
+        Op = Optimizer()
+        self.results = Op.getOptimVals(self.lagrangian,_vars+[lmda],feval=f)
+        
+        return self.results 
+
+
+def optimHandler(text):
+    text = text.replace('^','**')
+    
+    # get elements 
+    variables = [i for i in text.split(' of')[-1] if (i not in ' / * - + ( ) [ ] e pi 123456789 ^ ')]
+    text_func = text.split(' of')[-1]
+    
+    # create required variables
+    exec(', '.join(variables)+""" = sy.symbols('"""+' '.join(variables)+"""')""")
+    exec('_vars = ['+', '.join(variables)+']')
+    
+    # create function
+    f = eval(text_func)
+    
+    # Optimize 
+    Opt = Optimizer()
+    
+    if ' min ' in text.lower():
+        return str(Opt.getMin(f,_vars))
+    if ' max ' in text.lower():
+        return str(Opt.getMax(f,_vars))
+    if ' minmax ' in text.lower():
+        return str(Opt.getBoth(f,_vars))
+    if 'optim' in text.lower():
+        return str(Opt.getAll(f,_vars))
+    
+    return 'Something went wrong! Not sure what happend.'
 # %% 
 
 

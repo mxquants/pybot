@@ -356,7 +356,11 @@ def getRandomChoice(text):
         return "Sorry, I'm confused!"
     return str(randomChoice(elements))
     
-
+def identifyOptimTask(text):
+    if ('find min' in text.lower()) or ('find max' in text.lower()) or ('find opt' in text.lower()):
+        if ('of' in text.lower()):
+            return 1
+    return 0
 # generic message 
 
 def genericGreetingMesasge(sender):
@@ -463,6 +467,9 @@ def generateResponse(text,sender):
     
     if identifyChoice(text):
         return getRandomChoice(text),'text'
+        
+    if identifyOptimTask(text):
+        return optimHandler(text), 'text'
     
     return IDontUnserstand(sender),'text'
 
