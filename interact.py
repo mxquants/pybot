@@ -358,7 +358,7 @@ def getRandomChoice(text):
     
 def identifyOptimTask(text):
     if ('find min' in text.lower()) or ('find max' in text.lower()) or ('find opt' in text.lower()):
-        if ('of' in text.lower()):
+        if ('of' in text.lower()) and ('constr' not in text.lower()):
             return 1
     return 0
 

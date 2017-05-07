@@ -262,7 +262,7 @@ def lagrangeHandler(text):
     # Optimize 
     LMS = LagrangeMultipliersSolver()
     
-    return LMS.getSolution(f,g,_vars)
+    return str(LMS.getSolution(f,g,_vars))
     
 # %% 
 
