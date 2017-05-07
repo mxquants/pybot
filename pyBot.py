@@ -82,7 +82,7 @@ def plot(f,a,b,legend='',filename=''):
     plt.ylabel('y-value')
     plt.legend([L.replace("**","^") for L in legend])
     plt.grid()
-    plt.savefig(filename,dpi=900)
+    plt.savefig(filename,dpi=1500)
     plt.close()
     
 def plotWrapper(param,sender):
