@@ -361,6 +361,12 @@ def identifyOptimTask(text):
         if ('of' in text.lower()):
             return 1
     return 0
+
+def identifyLagrangeTask(text):
+    if ('find' in text.lower()) or ('opt' in text.lower()):
+        if ('of' in text.lower()) and ('with' in text.lower()) and ('constraints' in text.lower()):
+            return 1
+    return 0
 # generic message 
 
 def genericGreetingMesasge(sender):
@@ -472,6 +478,14 @@ def generateResponse(text,sender):
         
         try:
             resp = optimHandler(text)
+        except:
+            resp = "Something went wrong! Check your syntax."
+        return resp, 'text'
+        
+    if identifyLagrangeTask(text):
+        
+        try:
+            resp = lagrangeHandler(text)
         except:
             resp = "Something went wrong! Check your syntax."
         return resp, 'text'

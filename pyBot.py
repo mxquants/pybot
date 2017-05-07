@@ -237,6 +237,33 @@ def optimHandler(text):
         return str(Opt.getAll(f,_vars))
     
     return 'Something went wrong! Not sure what happend.'
+
+def lagrangeHandler(text):
+    text = text.replace('^','**')
+    
+    def getRidOfSpecialFunc(text):
+        return text.replace("sin"," ").replace("pi"," ")
+    def getSyntaxRight(text):
+        return text.replace("e","sy.exp(1)").replace("sin","sy.sin").replace("cos","sy.cos").replace("tan","sy.tan").replace("pi","sy.pi")    
+    
+    # get elements 
+    variables = list(set([i for i in getRidOfSpecialFunc(text.split(' of')[-1].split('with')[0]) if (i not in ' / * - + ( ) [ ] e 123456789 ^ ')]))
+    text_f    = getSyntaxRight(text.split(' of')[-1].split('with')[0])
+    text_g    = getSyntaxRight(text.split('constraints')[-1])
+    
+    # create required variables
+    exec(', '.join(variables)+""" = sy.symbols('"""+' '.join(variables)+"""')""")
+    _vars = eval('['+', '.join(variables)+']')
+    
+    # create function
+    f = eval(text_f)
+    g = eval(text_g)
+    
+    # Optimize 
+    LMS = LagrangeMultipliersSolver()
+    
+    return LMS.getSolution(f,g,_vars)
+    
 # %% 
 
 
