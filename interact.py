@@ -469,7 +469,12 @@ def generateResponse(text,sender):
         return getRandomChoice(text),'text'
         
     if identifyOptimTask(text):
-        return optimHandler(text), 'text'
+        
+        try:
+            resp = optimHandler(text)
+        except:
+            resp = "Something went wrong! Check your syntax."
+        return resp, 'text'
     
     return IDontUnserstand(sender),'text'
 
