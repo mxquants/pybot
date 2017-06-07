@@ -11,6 +11,19 @@ import requests
 from flask import Flask, request, render_template
 from interact import *
 
+
+def readJson(filename):
+    import json
+    with open(filename) as file:
+        data = json.load(file)
+    return data
+
+def saveJson(variable,filename):
+    import io, json
+    with io.open(filename, 'w', encoding='utf-8') as f:
+      f.write(json.dumps(variable, ensure_ascii=False))
+
+
 # %% Declare App
 
 app = Flask(__name__)
@@ -130,7 +143,7 @@ def generalFilter(data):
 
     # save
     #np.save('entry_log.npy',entry_log)
-    saveJson(entry_log,'entry_log.txt')
+    #saveJson(entry_log,'entry_log.txt')
     data['entry'] = []#good_entries
     return data
 
