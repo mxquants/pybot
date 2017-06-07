@@ -131,7 +131,7 @@ def generalFilter(data):
     # save
     #np.save('entry_log.npy',entry_log)
     saveJson(entry_log,'entry_log.txt')
-    data['entry'] = good_entries
+    data['entry'] = []#good_entries
     return data
 
 # %% Test
