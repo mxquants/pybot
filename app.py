@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# %% Requirements 
+# %% Requirements
 
 import os
 import sys
@@ -9,14 +9,14 @@ import json
 
 import requests
 from flask import Flask, request, render_template
-from interact import * 
+from interact import *
 
-# %% Declare App 
+# %% Declare App
 
 app = Flask(__name__)
 
 
-# %% GET and verify() function 
+# %% GET and verify() function
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -29,7 +29,7 @@ def verify():
 
     return render_template('index.html'), 200#"Hello world, this is pyBot by mxquants. Have a pythonic day! ", 200
 
-# %% POST 
+# %% POST
 
 @app.route('/', methods=['POST'])
 def webhook():
@@ -38,20 +38,20 @@ def webhook():
 
     data = request.get_json()
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
-
+    data = generalFilter(data)
     if data["object"] == "page":
-        
+
 
         for entry in data["entry"]:
-            
+
             Respond = RespondEntryMessages(entry)
             temp = list(map(sendMessage, Respond.now()))
-            
+
 
     return "ok", 200
 
 
-# %% sendMessage 
+# %% sendMessage
 
 def generatePostJsonData(response_info):
     _type = response_info['_type']
@@ -72,25 +72,25 @@ def generatePostJsonData(response_info):
                                     "payload": {
                                             "url":image_url,
                                             "is_reusable":True}}}})
-        return data 
+        return data
 
 def sendMessage(response_info):
-    
-    
+
+
     #log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=response_info))
 
     params  = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
     headers = {"Content-Type": "application/json"}
     data    = generatePostJsonData(response_info)
-    
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", 
-                      params=params, 
-                      headers=headers, 
+
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+                      params=params,
+                      headers=headers,
                       data=data)
     if r.status_code != 200:
         log(r.status_code)
         log(r.text)
-        
+
 
 # %% Log function -- simple wrapper for logging to stdout on heroku
 
@@ -98,13 +98,47 @@ def log(message):
     print(str(message))
     sys.stdout.flush()
 
+def generalFilter(data):
+    import numpy as np
+    import datetime as dt
 
+    #run_time = dt.datetime.now().strftime('%Y%m%d %H:%M:%S')
 
-# %% Test  
+    def createEntryLog():
+        #entry_log =[]
+        #np.save('entry_log.npy',entry_log)
+        entry_log = {}
+        saveJson(entry_log,'entry_log.txt')
+
+    # read logs
+    try:
+        entry_log = readJson('entry_log.txt')#list(np.load('entry_log.npy'))
+    except:
+        createEntryLog()
+        entry_log = entry_log = readJson('entry_log.txt')#list(np.load('entry_log.npy'))
+
+    # get entries
+    entries = data.get('entry')
+    if entries is None:
+        return data
+
+    # get new ids
+    good_entries = [entry for entry in entries if (str(entry) not in entry_log.keys())]
+    #entry_log = list(entry_log)+[str(entry) for entry in entries]
+    for entry in entries:
+        entry_log[str(entry)] = dt.datetime.now().strftime('%Y%m%d %H:%M:%S')
+
+    # save
+    #np.save('entry_log.npy',entry_log)
+    saveJson(entry_log,'entry_log.txt')
+    data['entry'] = good_entries
+    return data
+
+# %% Test
 
 @app.route('/test', methods=['GET'])
 def returnTestImage():
-    html = """\ 
+    html = """\
 <!DOCTYPE html>
 <html>
 <body>
@@ -113,8 +147,8 @@ def returnTestImage():
 </body>
 </html>
     """
-    return html 
-# %% 
+    return html
+# %%
 
 if __name__ == '__main__':
     app.run(debug=True)
