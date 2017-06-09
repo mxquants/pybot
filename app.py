@@ -1,72 +1,67 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""pyBot Rest API.
+This is pyBot's rest API.
 
-# %% Requirements
+@author: Rodrigo Hernández-Mota
+rhdzmota@mxquants.com
+"""
 
 import os
+import io
 import sys
 import json
-
 import requests
+import datetime as dt
 from flask import Flask, request, render_template
-from interact import *
+from interact import RespondEntryMessages
 
 
 def readJson(filename):
-    import json
+    """Read a .txt file that contains a json."""
     with open(filename) as file:
         data = json.load(file)
     return data
 
-def saveJson(variable,filename):
-    import io, json
+
+def saveJson(variable, filename):
+    """Save a dict as a .txt containing a json."""
     with io.open(filename, 'w', encoding='utf-8') as f:
-      f.write(json.dumps(variable, ensure_ascii=False))
+        f.write(json.dumps(variable, ensure_ascii=False))
 
 
-# %% Declare App
-
+#  Declare App
 app = Flask(__name__)
 
 
-# %% GET and verify() function
-
 @app.route('/', methods=['GET'])
 def verify():
-    # when the endpoint is registered as a webhook, it must echo back
-    # the 'hub.challenge' value it receives in the query arguments
-    if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
-        if not request.args.get("hub.verify_token") == os.environ["VERIFY_TOKEN"]:
+    """Verify if FB-Messenger or something else."""
+    if request.args.get("hub.mode") == "subscribe" and \
+            request.args.get("hub.challenge"):
+        if not request.args.get("hub.verify_token") == \
+             os.environ["VERIFY_TOKEN"]:
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
+    return render_template('index.html'), 200
 
-    return render_template('index.html'), 200#"Hello world, this is pyBot by mxquants. Have a pythonic day! ", 200
-
-# %% POST
 
 @app.route('/', methods=['POST'])
 def webhook():
-
-    # endpoint for processing incoming messaging events
-
+    """Facebook Messenger Webhook."""
     data = request.get_json()
-    log(data)  # you may not want to log every incoming message in production, but it's good for testing
+    log(data)
     data = generalFilter(data)
     if data["object"] == "page":
-
-
         for entry in data["entry"]:
-
             Respond = RespondEntryMessages(entry)
-            temp = list(map(sendMessage, Respond.now()))
-
-
+            list(map(sendMessage, Respond.now()))
     return "ok", 200
 
 
-# %% sendMessage
-
+# Send Message
 def generatePostJsonData(response_info):
+    """Generate Json Data for FB-M Post."""
     _type = response_info['_type']
     recipient_id = response_info["Sender"]
     if "text" in _type:
@@ -83,19 +78,16 @@ def generatePostJsonData(response_info):
                             "message": {"attachment": {
                                     "type": "image",
                                     "payload": {
-                                            "url":image_url,
-                                            "is_reusable":True}}}})
+                                            "url": image_url,
+                                            "is_reusable": True}}}})
         return data
 
+
 def sendMessage(response_info):
-
-
-    #log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=response_info))
-
-    params  = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
+    """Send Message to FB-Messenger."""
+    params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
     headers = {"Content-Type": "application/json"}
-    data    = generatePostJsonData(response_info)
-
+    data = generatePostJsonData(response_info)
     r = requests.post("https://graph.facebook.com/v2.6/me/messages",
                       params=params,
                       headers=headers,
@@ -105,30 +97,27 @@ def sendMessage(response_info):
         log(r.text)
 
 
-# %% Log function -- simple wrapper for logging to stdout on heroku
-
+# Log data at Heroku
 def log(message):
+    """Log data into Heroku."""
     print(str(message))
     sys.stdout.flush()
 
+
+# Filter data (not functional)
 def generalFilter(data):
-    import numpy as np
-    import datetime as dt
-
-    #run_time = dt.datetime.now().strftime('%Y%m%d %H:%M:%S')
-
+    """Filter data."""
     def createEntryLog():
-        #entry_log =[]
-        #np.save('entry_log.npy',entry_log)
+        # entry_log =[]
+        # np.save('entry_log.npy',entry_log)
         entry_log = {}
-        saveJson(entry_log,'entry_log.txt')
+        saveJson(entry_log, 'entry_log.txt')
 
-    # read logs
     try:
-        entry_log = readJson('entry_log.txt')#list(np.load('entry_log.npy'))
+        entry_log = readJson('entry_log.txt')
     except:
         createEntryLog()
-        entry_log = entry_log = readJson('entry_log.txt')#list(np.load('entry_log.npy'))
+        entry_log = entry_log = readJson('entry_log.txt')
 
     # get entries
     entries = data.get('entry')
@@ -136,32 +125,17 @@ def generalFilter(data):
         return data
 
     # get new ids
-    good_entries = [entry for entry in entries if (str(entry) not in entry_log.keys())]
-    #entry_log = list(entry_log)+[str(entry) for entry in entries]
+    good_entries = [entry for entry in entries
+                    if (str(entry) not in entry_log.keys())]
     for entry in entries:
         entry_log[str(entry)] = dt.datetime.now().strftime('%Y%m%d %H:%M:%S')
 
     # save
-    #np.save('entry_log.npy',entry_log)
-    #saveJson(entry_log,'entry_log.txt')
+    # np.save('entry_log.npy',entry_log)
+    # saveJson(entry_log,'entry_log.txt')
     data['entry'] = good_entries
     return data
 
-# %% Test
-
-@app.route('/test', methods=['GET'])
-def returnTestImage():
-    html = """\
-<!DOCTYPE html>
-<html>
-<body>
-<h2>The Incredible pyBot!</h2>
-<img src="https://scontent-dft4-2.xx.fbcdn.net/v/t34.0-12/18051760_10156149925989966_1903532741_n.png?oh=d54e7de3f9776a37d92ecd402d1f97a6&oe=58FFBAD0">
-</body>
-</html>
-    """
-    return html
-# %%
 
 if __name__ == '__main__':
     app.run(debug=True)
