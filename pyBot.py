@@ -15,8 +15,16 @@ import sympy as sy
 
 def fibo(n):
     """Recursive fibonacci function."""
-    print(n)
     return 1 if n < 2 else fibo(n - 1) + fibo(n - 2)
+
+
+def fibonacci(n):
+    """Fibonacci series."""
+    if n > 30:
+        print("Sorry, can't handle that.")
+        return 1
+    for i in range(n + 1):
+        print(fibo(i), sep=" ")
 
 
 def factorial(n):
