@@ -482,6 +482,11 @@ def identifyCreatorQuestion(text):
                                     ("master" in text.lower()) or
                                     ("engineer" in text.lower())):
         return 1
+    if (("developer" in text.lower()) or
+        ("coder" in text.lower()) or
+        ("programmer" in text.lower())) and \
+       ("info" in text.lower()):
+        return 1
     return 0
 
 # Generate Response
