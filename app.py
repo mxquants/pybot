@@ -60,7 +60,7 @@ def webhook():
 
 
 # Send Message
-def generateQuickReplies(quick_type, imei):
+def generateQuickReplies(quick_type):
     """Generate buttons for quick reply."""
     if quick_type == 'options':
         return [
