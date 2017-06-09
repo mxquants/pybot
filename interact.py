@@ -508,35 +508,7 @@ class RespondEntryMessages(object):
     def now(self):
         """Now method."""
         def getSenderAndText(mevent):
-            """
-            if mevent.get('postback'):
-                sender = mevent['sender']['id']
-                payload = mevent['postback']['payload']
-                if not payload:
-                    response, _type, quick_reply = "This is a developer " + \
-                                                   "message: Something w" + \
-                                                   "eird happened with p" + \
-                                                   "ostbacks.", "text", "none"
-                else:
-                    response, _type, quick_reply = generateResponse(payload,
-                                                                    sender)
-                if "text" in _type:
-                    return {'Sender': sender,
-                            'OriginalText': payload,
-                            'Payload': True,
-                            'Text': response,
-                            '_type': _type,
-                            'quick_reply': quick_reply,
-                            }
-                if "image" in _type:
-                    return {'Sender': sender,
-                            'OriginalText': payload,
-                            'Payload': True,
-                            'ImageURL': response,
-                            '_type': _type,
-                            'quick_reply': quick_reply,
-                            }
-                """
+
             if(mevent.get('message')):
                 sender = mevent['sender']['id']
                 text = mevent['message'].get('text')
