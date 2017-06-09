@@ -438,6 +438,19 @@ def identifyMoreOptions(text):
         return 1
     return 0
 
+
+def identifyCalculatorInstr(text):
+    """Identify when the calculator is needed."""
+    if "PAYLOAD_CALC" == text:
+        return 1
+    return 0
+
+
+def identifyCalculator(text):
+    """Identify when the calculator is needed."""
+    if "calculate" in text.lower()[:9]:
+        return 1
+    return 0
 # Generate Response
 
 
@@ -447,6 +460,12 @@ def generateResponse(text, sender):
         text_script = getPyCode(text)
         SP = SpeakPython(script=text_script, user=sender)
         return SP.interpret(), 'text', 'options'
+    if identifyCalculatorInstr(text):
+        return "Write 'calculate ...' and substitute the ... " + \
+                "with your (simple) math.", "text", "options"
+    if identifyCalculator(text):
+        ans = py.calculate(text.replace("calculate ", ""))
+        return ans, "text", "options"
     if identifyShortMessageAndGreeting(text):
         return genericGreetingMesasge(sender), 'text', 'options'
     if identifyWhoYouAre(text):

@@ -70,8 +70,8 @@ def generateQuickReplies(quick_type):
                 "payload": "PAYLOAD_JOKES"
              }, {
                  "content_type": "text",
-                 "title": "Say Hello!",
-                 "payload": "PAYLOAD_HELLO"
+                 "title": "Calculator",
+                 "payload": "PAYLOAD_CALC"
              }, {
                  "content_type": "text",
                  "title": "More options",
