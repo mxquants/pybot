@@ -9,7 +9,7 @@ Contact: rhdzmota@mxquants.com
 
 from numpy.random import uniform
 from numpy import log, sin, cos, tan, arctan, arcsin, arccos, pi, e, \
-                  exp, power, arange
+                  exp, power, arange, sqrt
 import sympy as sy
 
 
@@ -47,12 +47,15 @@ def calculator(string):
             return 0
         return 1
 
+    def basicFormatting(string):
+        return string.replace("ln", "log").replace("^", "**")
+
     fail_answer = "Oh! I'm afraid I can't do that."
     if not security:
         return fail_answer
 
     try:
-        res = eval(string)
+        res = eval(basicFormatting(string))
         return str(res)
     except:
         return fail_answer
