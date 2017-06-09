@@ -451,6 +451,28 @@ def identifyCalculator(text):
     if "calculate" in text.lower()[:9]:
         return 1
     return 0
+
+
+def identifyFibo(text):
+    """Identify fibonacci function."""
+    if text.lower()[:11] == "fibonacci(":
+        return 1
+    return 0
+
+
+def evalFibo(text, sender):
+    """Evaluate fibo func."""
+    script = """\
+#python
+import pyBot as pb
+pb.{}
+"""
+    if identifyPyCode(script):
+        text_script = getPyCode(script)
+        SP = SpeakPython(script=text_script, user=sender)
+        return SP.interpret()
+    return "Whoa, that's not the good ol'fibo."
+
 # Generate Response
 
 
@@ -466,6 +488,8 @@ def generateResponse(text, sender):
     if identifyCalculator(text):
         ans = py.calculator(text.replace("calculate ", ""))
         return ans, "text", "options"
+    if identifyFibo(text):
+        return evalFibo(text, sender), "text", "options"
     if identifyShortMessageAndGreeting(text):
         return genericGreetingMesasge(sender), 'text', 'options'
     if identifyWhoYouAre(text):
