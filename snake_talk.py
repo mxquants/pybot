@@ -6,22 +6,16 @@ Created on Wed Apr 19 19:27:55 2017
 @author: rhdzmota
 """
 
-
-# %% Imports 
-
 import signal
-
-# %% Handle long functions 
+import subprocess
 
 
 def handler(signum, frame):
+    """WTF is this."""
     raise OSError("Limit time exceeded!")
 
-    
-# %% Simulate user's input
-
 def simulateInput(script=None):
-    
+    """Simulate user's input for testing."""
     if script is None:
         script = """\
 print('\n---- mxquant input test / expected output ----\n\n')
@@ -33,17 +27,15 @@ for i in range(4):
 print("Hey")
 
 
-
 print('\n\n---- mxquant input test / expected output ----\n')
         """
-    
     return script
 
-# %% Make wrapper function
 
 def wrapperFunc(string):
+    """Wrapper Function."""
     _str = """\
-import signal 
+import signal
 
 # signal handler function
 def handler(signum, frame):
@@ -54,103 +46,138 @@ signal.alarm(30)
 {}
 signal.alarm(0)
 """
-    _str = _str.format(string)#'import signal\nsignal.signal(signal.SIGALRM, handler)\nsignal.alarm(300)\n'+string+'\nsignal.alarm(0)'
+    _str = _str.format(string)
     _str = '\n    '.join(_str.split('\n'))
-    str_func = "def basicWrapper():\n    {}\n    return 1\n\nif __name__ == '__main__':\n    basicWrapper()".format(_str)
-    return str_func
+    str_func = "def basicWrapper():\n    {}\n    " + \
+               "return 1\n\nif __name__ == '__main__':\n    basicWrapper()"
+    return str_func.format(_str)
 
 
-# %% 
-
-def saveIntoPyScript(text_script,file='temp.py'):
-    
+def saveIntoPyScript(text_script, file='temp.py'):
+    """Save text into a temporal python script."""
     with open(file, 'w') as f:
         f.write(text_script)
-        
 
-# %% 
 
 def runPyScript(file='temp.py'):
+    """Run a python script from a python script."""
     exec('from {} import basicWrapper'.format(file.split('.')[0]))
     return basicWrapper()
 
-def generateOutput(file='temp.py',output='output.txt'):
-    import subprocess
-    bash_command = 'python {} > {}'.format(file,output)
-    
+
+def generateOutput(file='temp.py', output='output.txt'):
+    """Save output into a temporal txt."""
+    bash_command = 'python {} > {}'.format(file, output)
     try:
-        subprocess.check_output(['bash','-c', bash_command])
+        subprocess.check_output(['bash', '-c', bash_command])
     except:
         print('Error')
         return 0
     return 1
 
+
 def readOutput(output='output.txt'):
+    """Read generated output."""
     with open(output, 'r') as f:
         output_string = f.read()
     return output_string
 
-def beSave(script_text):
+
+def safeImport(string):
+    """Count number of safe imports."""
+    save_imports = ["import pyBot", "import math", "import numpy",
+                    "import pandas", "import datetime"]
+    n_imp = 0
+    for imp in save_imports:
+        n_imp += (imp in string)
+    return n_imp
+
+
+def numberOfImports(string, n=0):
+    """Count number of imports."""
+    res = string.split("import")
+    if len(res) == 1:
+        return n
+    return numberOfImports(string="import".join(res[1:]), n=n+1)
+
+
+def beSafe(script_text):
+    """Safty first."""
     if 'write' in script_text:
         return 0
     if 'open(' in script_text:
         return 0
     if 'while' in script_text:
         return 0
+    if "import" in script_text:
+        nsafe = safeImport(script_text)
+        nimps = numberOfImports(script_text)
+        if nimps > nsafe:
+            return 0
     return 1
 
-# %% 
 
 def sorryMessage():
-    return "Whoops! Coudn't run script! \nTime's up or maybe I just can't handle that code... Might be a bug or something else! Beware and code safe.\n\nSidenote: max 30 sec. of processing per message."
+    """Sorry message."""
+    return "Whoops! Coudn't run script! \nTime's up or maybe I j" + \
+           "ust can't handle that code... Might be a bug or som" + \
+           "ething else! Beware and code safe.\n\nSidenote: max" + \
+           " 30 sec. of processing per message."
+
 
 def riskyCode():
-    return "Sorry Dave, I'm afraid I cannot do that. \n\nReason: unsafe code detected, I don't wanna be hurt.\nPlease avoid writing to disk, while loops and other dangerous code!"
+    """Risky code message."""
+    return "Sorry Dave, I'm afraid I cannot do that. \n\nReason:" + \
+           " unsafe code detected, I don't wanna be hurt.\nPleas" + \
+           "e avoid writing to disk, while loops and other dange" + \
+           "rous code! Note: do whole imports (import numpy as np)."
+
 
 class SpeakPython(object):
-    
-    def __init__(self,script='print("No code send!")',user='anonymous'):
+    """Speak Parseltongue."""
+
+    def __init__(self, script='print("No code send!")', user='anonymous'):
+        """Initialize."""
         self.text_script = script
-        self.user = user 
-        
+        self.user = user
+
     def interpret(self):
-        
-        if 'mxquant:command -do test'==self.text_script:
+        """Translate."""
+        if 'mxquant:command -do test' == self.text_script:
             a = simulateInput(None)
             b = wrapperFunc(a)
             saveIntoPyScript(b)
             _status = generateOutput()
-            _result = sorryMessage() if not _status else readOutput(self.output_name)
+            _result = sorryMessage() if not _status else readOutput(
+                                                            self.output_name)
             return _result
-        
-        # Be save! 
-        _save = beSave(self.text_script)
+
+        # Be safe!
+        _save = beSafe(self.text_script)
         if not _save:
             return riskyCode()
-        
-        # Create file names for source (temp.py / {}) and output (output.txt / {})
-        self.file_name   = 'temp.py'    if 'anony' in self.user else '{}_file.py'.format(self.user)
-        self.output_name = 'output.txt' if 'anony' in self.user else '{}_out.py'.format(self.user)
-        
+
+        # Create file names for source (temp.py / {}) and output
+        # (output.txt / {})
+        self.file_name = 'temp.py' if 'anony' in self.user else \
+            '{}_file.py'.format(self.user)
+        self.output_name = 'output.txt' if 'anony' in self.user else \
+            '{}_out.py'.format(self.user)
+
         # Create code with wrapper func.
         self.code = wrapperFunc(self.text_script)
-        
+
         # Generate source code, run and save output file
-        saveIntoPyScript(self.code,file=self.file_name)
-        status = generateOutput(file=self.file_name,output=self.output_name)
-        
+        saveIntoPyScript(self.code, file=self.file_name)
+        status = generateOutput(file=self.file_name, output=self.output_name)
+
         # Get results or say sorry
         result = sorryMessage() if not status else readOutput(self.output_name)
         return result
 
 
-# %% 
-
 def test(script_as_string=None):
+    """Test."""
     a = simulateInput(script_as_string)
     sp = SpeakPython(a)
     return sp.interpret()
-    
-    
-
-#%% 
