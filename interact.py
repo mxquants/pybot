@@ -300,12 +300,16 @@ def identifyCoin(text):
     """Identify when someone asks a flipped coin."""
     if 'flip' in text.lower() and 'coin' in text.lower():
         return 1
+    if "PAYLOAD_COIN" == text:
+        return 1
     return 0
 
 
 def identifyDice(text):
     """Identify when someone ask for a rolled dice."""
     if 'roll' in text.lower() and 'dice' in text.lower():
+        return 1
+    if "PAYLOAD_DICE" == text:
         return 1
     return 0
 
@@ -504,6 +508,7 @@ class RespondEntryMessages(object):
     def now(self):
         """Now method."""
         def getSenderAndText(mevent):
+            """
             if mevent.get('postback'):
                 sender = mevent['sender']['id']
                 payload = mevent['postback']['payload']
@@ -531,7 +536,7 @@ class RespondEntryMessages(object):
                             '_type': _type,
                             'quick_reply': quick_reply,
                             }
-
+                """
             if(mevent.get('message')):
                 sender = mevent['sender']['id']
                 text = mevent['message'].get('text')
