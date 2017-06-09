@@ -466,7 +466,7 @@ def evalFibo(text, sender):
 #python
 import pyBot as pb
 pb.{}
-"""
+""".format(text)
     if identifyPyCode(script):
         text_script = getPyCode(script)
         SP = SpeakPython(script=text_script, user=sender)
