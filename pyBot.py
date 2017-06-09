@@ -30,7 +30,7 @@ def flipCoin():
 
 def rollDice():
     """Just roll a dice."""
-    return int(uniform(0, 6))
+    return int(uniform(0, 6))+1.0
 
 
 def randomChoice(_list):
@@ -39,6 +39,23 @@ def randomChoice(_list):
     choice = int(uniform(0, elements))
     return _list[choice]
 
+
+def calculator(string):
+    """Perform calculations."""
+    def security(string):
+        if "import" in string:
+            return 0
+        return 1
+
+    fail_answer = "Oh! I'm afraid I can't do that."
+    if not security:
+        return fail_answer
+
+    try:
+        res = eval(string)
+        return str(res)
+    except:
+        return fail_answer
 # Integrals
 
 

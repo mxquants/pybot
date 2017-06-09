@@ -464,7 +464,7 @@ def generateResponse(text, sender):
         return "Write 'calculate ...' and substitute the ... " + \
                 "with your (simple) math.", "text", "options"
     if identifyCalculator(text):
-        ans = py.calculate(text.replace("calculate ", ""))
+        ans = py.calculator(text.replace("calculate ", ""))
         return ans, "text", "options"
     if identifyShortMessageAndGreeting(text):
         return genericGreetingMesasge(sender), 'text', 'options'
