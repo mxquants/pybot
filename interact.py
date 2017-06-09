@@ -455,7 +455,7 @@ def identifyCalculator(text):
 
 def identifyFibo(text):
     """Identify fibonacci function."""
-    if text.lower()[:11] == "fibonacci(":
+    if text.lower()[:10] == "fibonacci(":
         return 1
     return 0
 
