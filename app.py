@@ -66,7 +66,7 @@ def generateQuickReplies(quick_type):
         return [
             {
                 "content_type": "text",
-                "title": "Tell me some jokes",
+                "title": "Tell me a joke",
                 "payload": "PAYLOAD_JOKES"
              }, {
                  "content_type": "text",
