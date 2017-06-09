@@ -60,27 +60,49 @@ def webhook():
 
 
 # Send Message
+def generateQuickReplies(quick_type, imei):
+    """Generate buttons for quick reply."""
+    if quick_type == 'options':
+        return [
+            {
+                "content_type": "text",
+                "title": "Get some jokes",
+                "payload": "PAYLOAD_JOKES"
+             }, {
+                 "content_type": "text",
+                 "title": "Say Hello!",
+                 "payload": "PAYLOAD_HELLO"
+             }
+        ]
+    return []
+
+
 def generatePostJsonData(response_info):
     """Generate Json Data for FB-M Post."""
+    print(response_info)
     _type = response_info['_type']
+    _quick = response_info['quick_reply']
+    # _text = response_info.get("OriginalText")
     recipient_id = response_info["Sender"]
     if "text" in _type:
         message_text = response_info["Text"]
-        data = json.dumps({
+        data = {
                             "recipient": {"id": recipient_id},
                             "message": {"text": message_text}
-                            })
-        return data
+                            }
+        data['message']['quick_replies'] = generateQuickReplies(_quick)
+        return json.dumps(data)
     if "image" in _type:
         image_url = response_info["ImageURL"]
-        data = json.dumps({
+        data = {
                             "recipient": {"id": recipient_id},
                             "message": {"attachment": {
                                     "type": "image",
                                     "payload": {
                                             "url": image_url,
-                                            "is_reusable": True}}}})
-        return data
+                                            "is_reusable": False}}}}
+        data['message']['quick_replies'] = generateQuickReplies(_quick)
+        return json.dumps(data)
 
 
 def sendMessage(response_info):
