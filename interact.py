@@ -427,7 +427,14 @@ nd. Let's talk with snakes! Btw I can also do some maths.
     """
     return _text.format(user_name)
 
-# %% Generate Response
+
+def identifyMoreOptions(text):
+    """Get more options."""
+    if text == "PAYLOAD_MORE_OPTS":
+        return 1
+    return 0
+
+# Generate Response
 
 
 def generateResponse(text, sender):
@@ -460,6 +467,8 @@ def generateResponse(text, sender):
         return py.rollDice(), 'text', 'options'
     if identifyChoice(text):
         return getRandomChoice(text), 'text', 'options'
+    if identifyMoreOptions(text):
+        return "Okay!", "text", "more_options"
     if identifyOptimTask(text):
         try:
             resp = py.optimHandler(text)

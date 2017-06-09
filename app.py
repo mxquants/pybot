@@ -66,12 +66,32 @@ def generateQuickReplies(quick_type):
         return [
             {
                 "content_type": "text",
-                "title": "Get some jokes",
+                "title": "Tell me some jokes",
                 "payload": "PAYLOAD_JOKES"
              }, {
                  "content_type": "text",
                  "title": "Say Hello!",
                  "payload": "PAYLOAD_HELLO"
+             }, {
+                 "content_type": "text",
+                 "title": "More options",
+                 "payload": "PAYLOAD_MORE_OPTS"
+             }
+        ]
+    if quick_type == 'more_options':
+        return [
+            {
+                "content_type": "text",
+                "title": "Flip a coin!",
+                "payload": "PAYLOAD_COIN"
+             }, {
+                 "content_type": "text",
+                 "title": "Roll a dice!",
+                 "payload": "PAYLOAD_DICE"
+             }, {
+                 "content_type": "text",
+                 "title": "Continue talking",
+                 "payload": "PAYLOAD_MORE_OPTS"
              }
         ]
     return []
