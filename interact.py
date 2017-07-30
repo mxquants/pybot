@@ -505,7 +505,7 @@ def generateResponse(text, sender):
     if identifyPyCode(text):
         try:
             nothing_warn = "Nothing came out from your code. Remember to add print() statements! Or maybe there is an undefined variable (each message is independent)."
-            too_much_warn = "Code output too large to send throw FB-Messenger. Please ask Mark to change this setting. :)"
+            too_much_warn = "Code output too large to be send throw FB-Messenger. Please ask Mark to change this setting. :)"
             text_script = getPyCode(text)
             SP = SpeakPython(script=text_script, user=sender)
             code_ans = SP.interpret()
