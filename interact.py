@@ -525,7 +525,7 @@ Whoa! Something went wrong. Make sure to put #py at the beginning of your messag
 
 # COPY AND PASTE THIS CODE
 
-print("PyBot will yield the 'print's in your code. Note the #py at the beginning, that's the magic word. Respect syntax and indentation. Some imprts are allowed. Happy coding! \n")
+print("PyBot will yield the 'print's in your code. Note the #py at the beginning, that's the magic word. Respect syntax and indentation. Some imprts are allowed. Happy coding!")
 
 msg = "Hello World! x"
 for i in range(5):
