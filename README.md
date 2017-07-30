@@ -5,7 +5,7 @@ Contact developer: Rodrigo Hernández Mota (rhdzmota@mxquants.com)
 
 ### [in development] 
 
-Facebook Messenger Chatbot that speaks python 3.6.1
+Facebook Messenger Chatbot that speaks python 3.6.1 among other features.
 
 
 
