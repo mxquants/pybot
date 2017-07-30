@@ -500,7 +500,13 @@ def generateResponse(text, sender):
     if identifyPyCode(text):
         text_script = getPyCode(text)
         SP = SpeakPython(script=text_script, user=sender)
-        return SP.interpret(), 'text', 'options'
+        try:
+            code_ans = SP.interpret()
+        except:
+            code_ans = """\
+Whoa! Something went wrong. Make sure to put #py at the beginning of your message and respect identation. :)
+"""
+        return code_ans, 'text', 'options'
     if identifyCalculatorInstr(text):
         return "Write 'calculate ...' and substitute the ... " + \
                 "with your (simple) math.", "text", "options"
