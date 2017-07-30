@@ -530,7 +530,7 @@ print("PyBot will yield the 'print's in your code. Note the #py at the beginning
 msg = "Hello World! x"
 for i in range(5):
     print(msg + str(i + 1))
-"""
+""", "text", "options"
     if identifyCalculator(text):
         ans = py.calculator(text.lower().replace("calculate ", ""))
         return ans, "text", "options"
