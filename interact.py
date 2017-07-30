@@ -502,6 +502,7 @@ def generateResponse(text, sender):
             text_script = getPyCode(text)
             SP = SpeakPython(script=text_script, user=sender)
             code_ans = SP.interpret()
+            code_ans = code_ans if len(code_ans) > 0 else "Órale, something went wrong! Must be an undefined variable (each meassage is independent)."
         except:
             code_ans = """\
 Whoa! Something went wrong. Make sure to put #py at the beginning of your message and respect identation. :)
