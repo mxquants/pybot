@@ -95,7 +95,7 @@ def generateQuickReplies(quick_type):
              }, {
                  "content_type": "text",
                  "title": "Continue talking",
-                 "payload": "PAYLOAD_MORE_OPTS"
+                 "payload": "hello"
              }
         ]
     return []
