@@ -147,7 +147,7 @@ def sorryMessage():
     return "Whoops! Coudn't run script! \nTime's up or maybe I j" + \
            "ust can't handle that code... Might be a bug or som" + \
            "ething else! Beware and code safe.\n\nSidenote: max" + \
-           " 30 sec. of processing per message."
+           " 5 sec. of processing per message."
 
 
 def riskyCode():
