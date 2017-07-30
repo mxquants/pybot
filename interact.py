@@ -498,9 +498,9 @@ def generateResponse(text, sender):
         return "I was coded by Rodrigo Hernández-Mota (rhdzmota@mxq" + \
                "uants.com). Feel free to contact!", "text", "options"
     if identifyPyCode(text):
-        text_script = getPyCode(text)
-        SP = SpeakPython(script=text_script, user=sender)
         try:
+            text_script = getPyCode(text)
+            SP = SpeakPython(script=text_script, user=sender)
             code_ans = SP.interpret()
         except:
             code_ans = """\
