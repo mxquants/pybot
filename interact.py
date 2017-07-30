@@ -329,6 +329,11 @@ def getRandomChoice(text):
         return "Sorry, I'm confused!"
     return str(py.randomChoice(elements))
 
+
+def identifyCodeEx(text):
+    """Payload for code example."""
+    return text == "PAYLOAD_SOME_CODE"
+
 # Optimiztion
 
 
@@ -514,6 +519,18 @@ Whoa! Something went wrong. Make sure to put #py at the beginning of your messag
     if identifyCalculatorInstr(text):
         return "Write 'calculate ...' and substitute the ... " + \
                 "with your (simple) math.", "text", "options"
+    if identifyCodeEx(text):
+        return """\
+#py
+
+# COPY AND PASTE THIS CODE
+
+print("PyBot will yield the 'print's in your code. Note the #py at the beginning, that's the magic word. Respect syntax and indentation. Some imprts are allowed. Happy coding! \n")
+
+msg = "Hello World! x"
+for i in range(5):
+    print(msg + str(i + 1))
+"""
     if identifyCalculator(text):
         ans = py.calculator(text.lower().replace("calculate ", ""))
         return ans, "text", "options"

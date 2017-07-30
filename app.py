@@ -74,6 +74,10 @@ def generateQuickReplies(quick_type):
                  "payload": "PAYLOAD_CALC"
              }, {
                  "content_type": "text",
+                 "title": "Code example",
+                 "payload": "PAYLOAD_SOME_CODE"
+             }, {
+                 "content_type": "text",
                  "title": "More options",
                  "payload": "PAYLOAD_MORE_OPTS"
              }
