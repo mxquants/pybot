@@ -504,7 +504,7 @@ def generateResponse(text, sender):
             text_script = getPyCode(text)
             SP = SpeakPython(script=text_script, user=sender)
             code_ans = SP.interpret()
-            code_ans = nothing_warn if len(cocode_ansde) == 0 else code_ans if len(code_ans) < 640 else too_much_warn
+            code_ans = nothing_warn if len(code_ans) == 0 else code_ans if len(code_ans) < 640 else too_much_warn
             # code_ans = code_ans if len(code_ans) > 0 else "Nothing came out from your code. Remember to add print() statements! Or maybe there is an undefined variable (each message is independent)."
         except:
             code_ans = """\
