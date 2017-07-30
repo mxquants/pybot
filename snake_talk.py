@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Apr 19 19:27:55 2017
-
+References:
+https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call-in-python
+https://stackoverflow.com/questions/10661079/restricting-pythons-syntax-to-execute-user-code-safely-is-this-a-safe-approach
 @author: rhdzmota
 """
 
@@ -48,8 +50,31 @@ signal.alarm(0)
 """
     _str = _str.format(string)
     _str = '\n    '.join(_str.split('\n'))
-    str_func = "def basicWrapper():\n    {}\n    " + \
-               "return 1\n\nif __name__ == '__main__':\n    basicWrapper()"
+    str_func = """\
+
+from multiprocessing import Process
+
+def basicWrapper():
+    {}
+    return 1
+
+def restrictedTime(func, args, kwargs, time):
+    p = Process(target=func, args=args, kwargs=kwargs)
+    p.start()
+    p.join(time)
+    if p.is_alive():
+        p.terminate()
+        print("Timeout: Code exceeded max. execution time.")
+        return False
+    return True
+
+
+if __name__ == '__main__':
+    #basicWrapper()
+    restrictedTime(basicWrapper, (), dict(), 5)
+"""
+    #str_func = "def basicWrapper():\n    {}\n    " + \
+    #           "return 1\n\nif __name__ == '__main__':\n    basicWrapper()"
     return str_func.format(_str)
 
 
@@ -113,8 +138,8 @@ def beSafe(script_text):
         nsafe = safeImport(script_text)
         nimps = numberOfImports(script_text)
         if nimps > nsafe:
-            return 0
-    return 1
+            return False
+    return True
 
 
 def sorryMessage():
